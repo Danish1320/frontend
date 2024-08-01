@@ -5,7 +5,12 @@ const TodoList = () => {
 
     const[count,setCount] = useState(1);
 
-    const [taskList, setTaskList] = useState([])
+    const [taskList, setTaskList] = useState([
+        {text : 'ghar ki safai', completed : false,added: new Date()},
+        {text : 'Padhai', completed : false,added: new Date()},
+        {text : 'khelna', completed : false,added: new Date()},
+
+    ])
 
     const addTask=(e) => {
         if(e.code==='Enter'){
@@ -25,11 +30,23 @@ const TodoList = () => {
 
             </div>
             <div className='p-6'>
-                <h1 className='text-3xl text-red-500'>{count}</h1>
-                <button className='bg-gray-300 p-4'
+                {/* //<h1 className='text-3xl text-red-500'>{count}</h1> */}
+                {/* <button className='bg-gray-300 p-4'
                     onClick={() =>{setCount(count+1); console.log(count);}}
                 >Add Count
-                </button>
+                </button> */}
+                {
+                    taskList.map((task, index) => { return (
+                        <div key={index} className='rounded-md border mb-5 shadow p-4 bg-gray-100'>
+                            <p>{task.text}</p>
+                            <div className='mt-2 flex justify-end gap-4'>
+                                <button className='bg-blue-500 text-white px-3 py-1 rounded-full'>Complete</button>
+                                <button className='bg-red-500 text-white px-3 py-1 rounded-full'>Delete</button>
+                            </div>
+
+                        </div>
+                    ) })
+                }
 
             </div>
 
