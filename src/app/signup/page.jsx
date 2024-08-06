@@ -1,4 +1,5 @@
 'use client';
+import { IconCircleCheck, IconLoader, IconLoader3 } from '@tabler/icons-react';
 import { useFormik } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
@@ -7,8 +8,15 @@ const SignupSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Too Short!')
     .max(50, 'Too Long!')
-    .required('Required'),
-  email: Yup.string().email('Invalid email').required('Required'),
+    .required(' Name is Required'),
+  email: Yup.string().email('Invalid email').required(' Email is Required'),
+  password: Yup.string().required('Password is required')
+    .matches(/[a-z]/, 'Lowercase letter Required')
+    .matches(/[A-Z]/, 'Uppercase letter Required')
+    .matches(/[0-9]/, 'Number Required')
+    .matches(/\W/, 'Special character required'),
+  confirmPassword: Yup.string().required('Confirm Password is Required')
+    .oneOf([Yup.ref('password'), null], 'Password must match')
 });
 
 const Signup = () => {
@@ -20,8 +28,14 @@ const Signup = () => {
       password: '',
       confirmPassword: ''
     },
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: (values, { resetForm, setSubmitting }) => {
+
+      setTimeout(() => {
+        console.log(values);
+        //resetForm();
+        setSubmitting(false);
+      }, 3000);
+
     },
     validationSchema: SignupSchema
   });
@@ -62,9 +76,12 @@ const Signup = () => {
                 ((signupForm.touched.confirmPassword && signupForm.errors.confirmPassword) ? 'border-red-500' : '')}
             />
 
-            <button type='submit'
-              className='bg-blue-500 text-white px-3 py-2 rounded w-full mt-8'
-            >Submit</button>
+            <button type='submit' disabled={signupForm.isSubmitting}
+              className='flex justify-center items-center bg-blue-500 text-white px-3 py-2 rounded w-full mt-8 disabled:opacity-50'
+            >
+              {signupForm.isSubmitting ? <IconLoader3 className='animate-spin' size={20} /> : <IconCircleCheck size={20} />}
+              <span>{signupForm.isSubmitting ? 'Please wait' : 'Submit'}</span>
+            </button>
 
 
           </form>
